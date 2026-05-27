@@ -25,12 +25,21 @@ def cast_regions_to_models(regions):
     
     return region_models
 
-def print_all_of_type(type):
-    for t in type:
+def print_all_of_type(element_collection):
+    for item in element_collection:
         print('--------')
-        for child in t:
-            print(f'{child.tag} - {child.text}')
+        _print_recursive(item, indent_level=0)
 
+def _print_recursive(element, indent_level):
+    indent = "  " * indent_level
+    
+    for child in element:
+        if len(child) > 0:
+            print(f"{indent}{child.tag}:")
+            _print_recursive(child, indent_level + 1)
+        else:
+            text = child.text.strip() if child.text else ""
+            print(f"{indent}{child.tag} - {text}")
 
 def main():
     parser = etree.XMLParser(recover=True)
@@ -47,7 +56,7 @@ def main():
     print(region_models[0])
 
     sites = root.find('historical_figures')
-    #print_all_of_type(sites)
+    print_all_of_type(sites)
 
 if __name__ == "__main__":
     main()

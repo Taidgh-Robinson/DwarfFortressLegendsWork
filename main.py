@@ -1,11 +1,12 @@
 from lxml import etree
 
 from models.region import Region
+from models.underground_region import UndergroundRegion
 
-def cast_regions_to_models(regions):
-    region_models = []
+def cast_basic_items_to_models(items, model_type):
+    models = []
 
-    for region in list(regions):
+    for region in list(items):
         temp_dict = {}
         
         for child in region:
@@ -17,13 +18,15 @@ def cast_regions_to_models(regions):
                 continue 
 
         try:
-            temp_region = Region.model_validate(temp_dict)
-            region_models.append(temp_region)
+            temp_model = model_type.model_validate(temp_dict)
+            models.append(temp_model)
         except Exception as e:
             print(f"Skipping an invalid region element. Error: {e}")
             print(f"Offending data dictionary: {temp_dict}")
     
-    return region_models
+    return models
+
+
 
 def print_all_of_type(element_collection):
     for item in element_collection:
@@ -47,16 +50,30 @@ def main():
         content = f.read().replace(b'encoding="UTF-8"', b'encoding="latin-1"')
         root = etree.fromstring(content, parser)
 
+    tags = []
     for child in root:
+        tags.append(child.tag)
         print(child.tag, len(child))
+
+    print(tags)
+    for tag in tags:
+        print(tag)
+        tmp = root.find(tag)
+        print_all_of_type(tmp)
 
     regions = root.find('regions')
 
-    region_models = cast_regions_to_models(regions)
+    region_models = cast_basic_items_to_models(regions, Region)
     print(region_models[0])
+    ungerground_regions = root.find('underground_regions')
 
-    sites = root.find('historical_figures')
+    underground_region_models = cast_basic_items_to_models(ungerground_regions, UndergroundRegion)
+    print(underground_region_models[0])
+
+    """
+    sites = root.find('historical_eras')
     print_all_of_type(sites)
+    """
 
 if __name__ == "__main__":
     main()

@@ -1,3 +1,4 @@
+import sys
 from typing import get_origin, get_args, Union
 
 from lxml import etree
@@ -167,7 +168,8 @@ def stream_legends_xml(file_path):
 
 
 if __name__ == '__main__':
-    results = stream_legends_xml('a.xml')
+    xml_path = sys.argv[1] if len(sys.argv) > 1 else 'legends.xml'
+    results = stream_legends_xml(xml_path)
     counts = {}
     for r in results:
         cls = type(r).__name__

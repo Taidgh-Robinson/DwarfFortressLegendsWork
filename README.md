@@ -1,17 +1,21 @@
 # DFLLM — Dwarf Fortress Legends Loader & Model
 
-Parses a Dwarf Fortress Legends mode XML export (`a.xml`) and loads it into PostgreSQL using [SQLModel](https://sqlmodel.tiangolo.com/) for type-safe, validated models.
+Parses a Dwarf Fortress Legends mode XML export and loads it into PostgreSQL using [SQLModel](https://sqlmodel.tiangolo.com/) for type-safe, validated models.
 
 ## Quick Start
 
 ```bash
+# Uses legends.xml by default
 docker compose up --build
+
+# Or use a specific XML file
+XML_FILE=export.xml docker compose up --build seed
 ```
 
 This starts a Postgres 16 container, then runs the seed service which:
 
 1. Drops and recreates all tables
-2. Parses `a.xml` using a generic, data-driven XML parser
+2. Parses the XML file using a generic, data-driven parser
 3. Inserts all parsed objects in batches of 1000
 
 ## Models
@@ -52,11 +56,13 @@ To add a new XML element type, add the model class to `models/`, register it in 
 ## Standalone Usage
 
 ```bash
-# Parse and print all objects
+# Parse and print all objects (defaults to legends.xml)
 uv run test.py
+uv run test.py export.xml
 
-# Load into database (requires Postgres running)
+# Load into database (requires Postgres running, defaults to legends.xml)
 uv run load_data.py
+uv run load_data.py export.xml
 ```
 
 ## Database

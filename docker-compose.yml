@@ -20,5 +20,6 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: postgresql://dfuser:dfpass@db:5432/dflegends
+    command: ["python", "load_data.py", "${XML_FILE:-legends.xml}"]
     volumes:
-      - ./a.xml:/app/a.xml
+      - ./${XML_FILE:-legends.xml}:/app/${XML_FILE:-legends.xml}

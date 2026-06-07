@@ -1,3 +1,4 @@
+import sys
 from collections import defaultdict
 
 from sqlmodel import SQLModel
@@ -25,14 +26,16 @@ BATCH_SIZE = 1000
 
 
 def main():
+    xml_path = sys.argv[1] if len(sys.argv) > 1 else 'legends.xml'
+
     print('Dropping existing tables...')
     SQLModel.metadata.drop_all(engine)
 
     print('Creating tables...')
     create_tables()
 
-    print('Parsing XML...')
-    results = stream_legends_xml('a.xml')
+    print(f'Parsing XML from {xml_path}...')
+    results = stream_legends_xml(xml_path)
     print(f'Parsed {len(results)} objects')
 
     by_type = defaultdict(list)

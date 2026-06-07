@@ -166,15 +166,16 @@ def stream_legends_xml(file_path):
     return results
 
 
-results = stream_legends_xml('a.xml')
-counts = {}
-for r in results:
-    cls = type(r).__name__
-    counts[cls] = counts.get(cls, 0) + 1
+if __name__ == '__main__':
+    results = stream_legends_xml('a.xml')
+    counts = {}
+    for r in results:
+        cls = type(r).__name__
+        counts[cls] = counts.get(cls, 0) + 1
 
-print(f'\nParsed {len(results)} total elements:')
-for cls, count in sorted(counts.items()):
-    print(f'  {cls}: {count}')
+    print(f'\nParsed {len(results)} total elements:')
+    for cls, count in sorted(counts.items()):
+        print(f'  {cls}: {count}')
 
-for r in results:
-    print(r)
+    for r in results:
+        print(r)

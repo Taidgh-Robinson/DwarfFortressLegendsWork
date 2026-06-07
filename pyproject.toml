@@ -8,4 +8,5 @@ dependencies = [
     "bigxml>=1.2.0",
     "lxml>=6.1.1",
     "sqlmodel>=0.0.38",
+    "psycopg2-binary>=2.9",
 ]
